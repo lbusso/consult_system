@@ -1,0 +1,91 @@
+{%  extends '__base.html' %}
+{% load crispy_forms_tags %}
+{% block statusbar %}
+{% endblock statusbar %}
+{% block sidebar %}
+{% endblock %}
+
+{% block content %}
+
+    {% if consulta %}
+         <div class="card card-body">
+			<h4 class="btn btn-info">Reclamos</h4>
+			<table id="tabla-dni" class="table table-responsive-md">
+            <thead>
+                <tr>
+					<th>Tiket</th>
+					<th>DNI</th>
+					<th>Categoria</th>
+					<th>Fecha</th>
+					<th>Estado</th>
+					<th>Actualizar</th>
+				</tr>
+            </thead>
+            <tbody>
+                  {% for reclamo in consulta %}
+                    <tr>
+                        <td>{{ reclamo.tiket }}</td>
+                        <td>{{ reclamo.dni }}</td>
+                        <td>{{ reclamo.categoria }}</td>
+                        <td>{{ reclamo.fecha_creada }}</td>
+                        {% if reclamo.estado == 'PENDIENTE' %}
+                            <td bgcolor="red" class="text-white text-center">{{ reclamo.estado }}</td>
+                            {% elif reclamo.estado == 'EN PROCESO' %}
+                            <td bgcolor="orange" class="text-white text-center">{{ reclamo.estado }}</td>
+                            {% else %}
+                            <td bgcolor="green" class="text-white text-center">{{ reclamo.estado }}</td>
+                        {% endif %}
+                        {% if reclamo.estado == 'CERRADO' %}
+                            {% if user.is_authenticated %}
+                                <td><a href="{% url 'consulta_detalle' reclamo.pk %}" type="button" class="btn btn-info">Ver</a></td>
+                                {% endif %}
+                            <td> <a href="" class="btn btn-success btn-circle btn-md"><i class="fas fa-check"></i></a></td>
+                            {% else %}
+                            <td><a href="{% url 'consulta_detalle' reclamo.pk %}" type="button" class="btn btn-info">Ver</a></td>
+                        {% endif %}
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+			</table>
+		</div>
+    {% else %}
+        <div class="dropdown-divider"></div>
+        <div class="px-3 py-5 bg-gradient-danger text-white">
+            <h2><div class="btn-circle btn-lg"><i class="fas fa-exclamation-triangle"></i></div> No existen reclamos que coincidan con lo solicitado, por favor, revise su información y realice nuevamente la búsqueda.</h2>
+        </div>
+        <div class="col-md-7">
+		<hr>
+    <div class="card">
+        <div class="card-header">
+            <h3>Consultar estado de mi Tiket</h3>
+        </div>
+        <div class="card card-body">
+
+			<form method="get" action="{% url 'consulta_estado' %}">
+                <input name="t" class="form-control" type="text" placeholder="Tiket de consulta" aria-label="Buscar">
+                <div class="dropdown-divider"></div>
+                <input name="e" class="form-control" type="email" placeholder="Email de consulta" aria-label="Buscar">
+
+                <div class="dropdown-divider"></div>
+                <button type="submit" class="btn btn-info">Ver estado</button>
+            </form>
+		</div>
+    </div>
+
+	</div>
+    {% endif %}
+{% endblock %}
+
+{% block js_page%}
+    <script>
+        $(document).ready(function () {
+           $('#tabla-dni').DataTable(
+               {
+                 "language": {
+                     "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+                 }},
+           );
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,59 @@
+{%  extends '__base.html' %}
+{% load crispy_forms_tags %}
+{% block statusbar %}
+{% endblock %}
+
+{% block content %}
+	<div class="container">
+		<div class="card card-body">
+			<h4 class="btn btn-info">Categoria: {{ categoria.nombre }}</h4>
+			<table id="categorias-list" class="table table-responsive-md">
+            <thead>
+                <tr>
+					<th>Ticket</th>
+					<th>Categoria</th>
+					<th>Fecha</th>
+					<th>Estado</th>
+					<th>Actualizar</th>
+					<th>Terminar</th>
+				</tr>
+            </thead>
+            <tbody>
+                 {% for reclamo in reclamo %}
+                    <tr>
+                        <td>{{ reclamo.tiket }}</td>
+                        <td>{{ reclamo.categoria }}</td>
+                        <td>{{ reclamo.fecha_creada }}</td>
+                        {% if reclamo.estado == 'PENDIENTE' %}
+                            <td bgcolor="red" class="text-white text-center">{{ reclamo.estado }}</td>
+                            {% elif reclamo.estado == 'EN PROCESO' %}
+                            <td bgcolor="orange" class="text-white text-center">{{ reclamo.estado }}</td>
+                            {% else %}
+                            <td bgcolor="green" class="text-white text-center">{{ reclamo.estado }}</td>
+                        {% endif %}
+                        {% if reclamo.estado == 'CERRADO' %}
+
+                            {% else %}
+                        {% endif %}
+                        <td><a href="{% url 'consulta_detalle' reclamo.pk %}" type="button" class="btn btn-info">Ver</a> </td>
+                        <td><button type="button" class="btn btn-danger" onclick="return abrir_modal('{% url 'consulta_cerrar' reclamo.id %}')">Terminar</button> </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+		</div>
+	</div>
+
+{% endblock %}
+{% block js_page %}
+     <script>
+        $(document).ready(function () {
+           $('#categorias-list').DataTable(
+               {
+                 "language": {
+                     "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+                 }},
+           );
+        });
+    </script>
+{% endblock js_page %}

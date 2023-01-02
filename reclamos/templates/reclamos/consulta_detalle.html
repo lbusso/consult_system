@@ -1,0 +1,107 @@
+{%  extends '__base.html' %}
+{% block statusbar %}
+{% endblock statusbar %}
+{% block sidebar %}
+{% endblock sidebar %}
+
+
+{% block content %}
+<div class="dropdown-divider"></div>
+<div class="row align-content-center">
+	<div class="col-md">
+		<div class="card card-body ">
+			<h3>Ticket: {{ detalle.tiket }}</h3>
+			<hr>
+            {% if user.is_authenticated %}
+                {% if detalle.estado != 'CERRADO' %}
+                    {% if detalle.estado == 'EN PROCESO' %}
+                        {% else %}
+                        <a class="btn btn-outline-success  btn-sm btn-block" onclick="return abrir_modal('{% url 'consulta_iniciar' detalle.id %}')" href="#">Iniciar Tramite </a>
+                     {% endif %}
+                <a class="btn btn-outline-danger  btn-sm btn-block" onclick="return abrir_modal('{% url 'consulta_cerrar' detalle.id %}')" href="#">Cerrar Ticket </a>
+                {% endif %}
+            {% endif %}
+            {% if detalle.estado != 'CERRADO' %}
+                {% if user.is_anonymous and detalle.estado == 'PENDIENTE' %}
+                <a class="btn btn-outline-info  btn-sm btn-block" onclick="return abrir_modal('{% url 'acceso_denegado' %}')" href="#">Responder </a>
+                    {% else %}
+                    <a class="btn btn-outline-info  btn-sm btn-block" onclick="return abrir_modal('{% url 'respuesta_create' detalle.id %}')" href="#">Responder </a>
+                {% endif %}
+                {% else %}
+                <a class="btn btn-outline-success  btn-sm btn-block" href="#">EL ticket fue cerrado </a>
+            {% endif %}
+
+		</div>
+	</div>
+	<div class="col-md">
+		<div class="card card-body">
+			<h5>Informacion de contacto</h5>
+			<hr>
+			<p>Nombre: {{ detalle.nombre }} | Apellido: {{ detalle.apellido }} </p>
+			<p>DNI: {{ detalle.dni }} | N° Registro: {{ detalle.registro }} </p>
+			<p>Carrera: {{ detalle.carrera }} </p>
+			<p>Email: {{ detalle.email }}</p>
+			<p>Telefono: {{ detalle.telefono }}</p>
+			<p>Estado: {{ detalle.estado }}</p>
+		</div>
+	</div>
+	<div class="col-md">
+		<div class="card card-body">
+			<h5>Total de respuestas</h5>
+			<hr>
+			<h1 style="text-align: center;padding: 10px">{{ detalle.respuesta_set.count }}</h1>
+		</div>
+	</div>
+</div>
+    <div class="dropdown-divider"></div>
+<div class="row">
+	<div class="col-md-6">
+        <div class="card text-white  mb-3 border-left-success">
+			  	<div class="card-header bg-success">
+			  		<h4 class="card-title">Consulta: </h4>
+			  	</div>
+			  	<div class="card-body">
+			    	<h3 class="card-body text-black-50">
+                        <i class="fas fa-comments fa-2x text-gray-300 align-self-lg-end"></i>  {{ detalle.consulta |urlizetrunc:20}}
+                    </h3>
+			  	</div>
+                 <div class="card-footer text-black-50">
+                <h6>{{ detalle.fecha_creada }}</h6>
+                 </div>
+        </div>
+	</div>
+</div>
+   <div class="row">
+	<div class="col-md-6">
+        {% for respuesta in resp %}
+            <div class="card text-center text-white  mb-3 border-left-warning">
+            {% if respuesta.user.id == None %}
+			  	<div class="card-header bg-danger">
+			  		<h5 class="card-title">Nueva Pregunta: </h5>
+			  	</div>
+            {% else %}
+                <div class="card-header bg-warning">
+			  		<h5 class="card-title">Respuesta: </h5>
+			  	</div>
+                {% endif %}
+			  	<div class="card-body">
+			    	<h3 class="card-body text-black-50">
+                        <i class="fas fa-comments fa-2x text-gray-300 align-self-lg-end"></i>  {{ respuesta.respuesta |urlizetrunc:20 }}
+                    </h3>
+			  	</div>
+                 <div class="card-footer text-black-50">
+                <h6>{{ respuesta.fecha_respuesta }} -
+                    {% if respuesta.user.get_full_name %}
+                        {{ respuesta.user.get_full_name }}
+                        {% else %}
+                        {{ detalle.nombre }}
+                    {% endif %}</h6>
+        </div>
+			</div>
+             <div class="dropdown-divider"></div>
+        {% endfor %}
+
+	</div>
+
+</div>
+{% endblock %}

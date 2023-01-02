@@ -1,0 +1,33 @@
+{%  extends '__base.html' %}
+{% load crispy_forms_tags %}
+{% block statusbar %}
+{% endblock statusbar %}
+
+
+{% block content %}
+
+<div class="row">
+	<div class="container">
+		<h3>Categorias:</h3>
+		<div class="card card-body">
+			<h4 class="btn btn-info">Filtrar categorias</h4>
+			<table class="table table-responsive-md">
+				<tr>
+					<th>Categoria</th>
+					<th>Ver Consultas</th>
+				</tr>
+                {% for cat in categorias %}
+                    <tr>
+                        <td>{{ cat.nombre }}</td>
+                        <td><a href="{% url 'categoria_list' cat.pk %}" type="button" class="btn btn-info">Ver</a> </td>
+                    </tr>
+                {% endfor %}
+
+			</table>
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}
+

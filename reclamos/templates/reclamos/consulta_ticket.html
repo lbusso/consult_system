@@ -1,0 +1,30 @@
+{%  extends '__base.html' %}
+{% load crispy_forms_tags %}
+{% block statusbar %}
+{% endblock statusbar %}
+
+{% block sidebar %}
+{% endblock sidebar %}
+
+{% block content %}
+    <br>
+    <div class="flex-column justify-content-xl-center">
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            <h3>Consultar estado de mi Ticket</h3>
+        </div>
+        <div class="card card-body">
+            <form method="get" action="{% url 'consulta_estado' %}">
+                <input name="t" class="form-control" type="text" placeholder="Ticket de consulta" aria-label="Buscar" required>
+                <div class="dropdown-divider"></div>
+                <input name="e" class="form-control" type="email" placeholder="Email de consulta" aria-label="Buscar" required>
+                <div class="dropdown-divider"></div>
+                <button type="submit" class="btn bg-gradient-fcejs text-white">Ver estado</button>
+            </form>
+        </div>
+    </div>
+    </div>
+{% endblock content %}
+
+
+

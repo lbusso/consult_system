@@ -1,0 +1,23 @@
+{%  extends '__base.html' %}
+
+{% block statusbar %}
+{% endblock statusbar %}
+
+{% block sidebar %}
+{% endblock sidebar %}
+
+{% block topbar%}
+{% endblock topbar %}
+
+{% block content %}
+<div class="jumbotron">
+<div class="px-3 py-5 bg-gradient-info text-white">
+    <h1>Muchas gracias por realizar su consulta, le enviaremos nuestra respuesta al mail que proporcionó al rellenar el formulario.</h1>
+    <h2>Para realizar una nueva consulta haga clic en:
+        <p><a href="{% url 'consulta_create' %}" class="btn btn-info">Nueva consulta</a></p>
+    </h2>
+</div>
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,81 @@
+{%  extends '__base.html' %}
+{% load crispy_forms_tags %}
+{% block statusbar %}
+{% endblock statusbar %}
+
+{% block sidebar %}
+{% endblock sidebar %}
+
+
+
+{% block content %}
+
+    <div class="row">
+	<div class="col-md-5">
+		<hr>
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h3>Realizá tu consulta aquí.</h3>
+            </div>
+            <div class=" card card-body">
+             <form method="post">
+    {% csrf_token %}
+    {{ form | crispy }}
+     <div class="text-right"><span id="caracteres" class="valid-text pt-3" id="txaCount"></span></div>
+    <button type="submit"  class="btn bg-gradient-fcejs text-white">Enviar</button>
+</form>
+		</div>
+        </div>
+
+	</div>
+
+	<div class="col-md-7">
+		<hr>
+         <div id="accordion" class="text-white">
+        <div class="card">
+        <div class="flex-column justify-content-xl-center">
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            <h3>Consultar estado de mi Ticket</h3>
+        </div>
+        <div class="card card-body">
+            <form method="get" action="{% url 'consulta_estado' %}">
+                <input name="t" class="form-control" type="text" placeholder="Ticket de consulta" aria-label="Buscar" required>
+                <div class="dropdown-divider"></div>
+                <input name="e" class="form-control" type="email" placeholder="Email de consulta" aria-label="Buscar" required>
+                <div class="dropdown-divider"></div>
+                <button type="submit" class="btn bg-gradient-fcejs text-white">Ver estado</button>
+            </form>
+        </div>
+    </div>
+    </div>
+
+
+
+         </div>
+	</div>
+
+</div>
+
+
+{% endblock %}
+
+{% block js_page %}
+    <script>
+        $("#id_consulta").on('keypress', function() {
+            var limit = 300;
+        $("#id_consulta").attr('maxlength', limit);
+            var init = $(this).val().length;
+
+         if(init<limit){
+            init++;
+         $('#caracteres').text("Máximo 300 caracteres:" + init);
+
+      }else{
+             init-1;
+         $('#caracteres').text("Máximo 300 caracteres:" + init);
+         }
+
+});
+    </script>
+{% endblock js_page %}

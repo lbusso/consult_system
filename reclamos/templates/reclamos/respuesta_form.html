@@ -1,0 +1,22 @@
+{% load crispy_forms_tags %}
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="card text-white  mb-3 border-left-warning">
+			  	<div class="card-header bg-warning">
+			  		<h4 class="card-title">Nueva Respuesta: </h4>
+			  	</div>
+			  	<form method="post" class="form-inline" role="form" action="{% url 'respuesta_create' consulta.id %}">
+                    {% csrf_token %}
+                    <div class="card-body">
+			    	<div class="card-body text-black-50 form-group">
+                        <div class="form col">{{ form.respuesta | as_crispy_field }}</div>
+                        <div class="form col "><i class="fas fa-comments fa-10x text-gray-400 align-self-lg-end"></i></div>
+                    </div>
+                         <button type="submit" class="btn btn-success">Responder</button>
+                        <button type="button" class="btn btn-danger" onclick="return cerrar_modal()">Cancelar</button>
+			  	</div>
+                </form>
+        </div>
+
+    </div>
+</div>

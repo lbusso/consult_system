@@ -1,0 +1,39 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres:11
+    volumes:
+    - postgres_data:/var/lib/postgresql/data/
+    environment:
+    - "POSTGRES_HOST_AUTH_METHOD=trust"
+    #restart: always
+
+
+  web:
+    build: .
+    command: gunicorn tiket_project.wsgi:application --timeout 300 --bind 0.0.0.0:8000
+    volumes:
+    - static:/code/staticfiles
+    - media:/code/media
+    - .:/code
+    depends_on:
+      - db
+   # restart: always
+
+  nginx:
+    image: nginx:1.13
+    ports:
+    - 80:80
+    volumes:
+    - ./config/nginx/conf.d:/etc/nginx/conf.d
+    - static:/code/staticfiles
+    - media:/code/media
+    depends_on:
+      - web
+   # restart: always
+volumes:
+  .:
+  postgres_data:
+  static:
+  media:
